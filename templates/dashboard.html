@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Goal Pilot{% endblock %}
+{% block content %}
+<div class="dash-heading">
+  <div><p class="eyebrow">YOUR PERSONAL WORKSPACE</p><h1>Dashboard</h1><p class="muted">Small steps every day lead to big results.</p></div>
+  <div class="stat panel"><strong>{{ completed }}/{{ total }}</strong><span>tasks completed</span></div>
+</div>
+
+<section class="panel">
+  <h2>Choose your career goal</h2>
+  <form class="goal-form" method="post" action="{{ url_for('set_goal') }}">
+    <select name="goal" required>
+      <option value="">Select a goal</option>
+      {% for goal in goals %}<option value="{{ goal }}" {% if user.goal == goal %}selected{% endif %}>{{ goal }}</option>{% endfor %}
+    </select>
+    <button class="button" type="submit">Save goal</button>
+  </form>
+  {% if user.goal %}
+    <h3 class="roadmap-title">{{ user.goal }} roadmap</h3>
+    <ol class="roadmap">
+      {% for title, details in roadmap %}
+        <li><strong>{{ title }}</strong><span>{{ details }}</span></li>
+      {% endfor %}
+    </ol>
+  {% endif %}
+</section>
+
+<section class="panel progress-panel">
+  <div class="section-heading"><div><h2>Your progress</h2><p class="muted">Based on completed tasks</p></div><strong class="percent">{{ progress }}%</strong></div>
+  <div class="progress"><div style="width: {{ progress }}%"></div></div>
+</section>
+
+<section class="panel">
+  <h2>Add a task</h2>
+  <form class="task-form" method="post" action="{{ url_for('add_task') }}">
+    <input name="title" placeholder="e.g. Practise SQL joins" required>
+    <select name="category"><option value="skill">Skill</option><option value="course">Course</option><option value="project">Project</option></select>
+    <input type="date" name="due_date" aria-label="Due date">
+    <button class="button" type="submit">Add task</button>
+  </form>
+  <h2 class="task-heading">Your tasks</h2>
+  {% if tasks %}
+    <ul class="tasks">
+    {% for task in tasks %}
+      <li class="{% if task.completed %}done{% endif %}">
+        <form method="post" action="{{ url_for('toggle_task', task_id=task.id) }}"><button class="check" title="Toggle completion">{% if task.completed %}✓{% else %}○{% endif %}</button></form>
+        <div class="task-copy"><strong>{{ task.title }}</strong><span>{{ task.category|title }}{% if task.due_date %} · Due {{ task.due_date }}{% endif %}</span></div>
+        <form method="post" action="{{ url_for('delete_task', task_id=task.id) }}"><button class="delete" title="Delete task">Delete</button></form>
+      </li>
+    {% endfor %}
+    </ul>
+  {% else %}<p class="muted">No tasks yet. Add your first task above.</p>{% endif %}
+</section>
+{% endblock %}

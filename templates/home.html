@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Goal Pilot — Plan your future{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">YOUR STUDY & CAREER COMPANION</p>
+  <h1>Turn your goals into<br><span>daily progress.</span></h1>
+  <p class="sub">Plan your learning, manage tasks and track your progress in one simple place.</p>
+  <div class="actions">
+    <a class="button" href="{{ url_for('signup') }}">Create free account</a>
+    <a class="button secondary" href="{{ url_for('login') }}">I already have an account</a>
+  </div>
+</section>
+<section class="feature-grid">
+  <article class="panel"><h3>🎯 Goal roadmaps</h3><p>Choose a career goal and follow a step-by-step learning path.</p></article>
+  <article class="panel"><h3>✓ Task manager</h3><p>Add tasks, set due dates and mark completed work.</p></article>
+  <article class="panel"><h3>📈 Progress tracking</h3><p>See your completion percentage and stay consistent.</p></article>
+</section>
+{% endblock %}

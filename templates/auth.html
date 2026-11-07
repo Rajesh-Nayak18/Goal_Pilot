@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}{{ mode }} — Goal Pilot{% endblock %}
+{% block content %}
+<section class="auth panel">
+  <p class="eyebrow">GOAL PILOT ACCOUNT</p>
+  <h1>{{ mode }}</h1>
+  <form method="post">
+    <label>Username</label>
+    <input name="username" minlength="3" required autocomplete="username">
+    <label>Password</label>
+    <input name="password" type="password" minlength="6" required autocomplete="{% if mode == 'Login' %}current-password{% else %}new-password{% endif %}">
+    <button class="button full" type="submit">{{ mode }}</button>
+  </form>
+  {% if mode == "Login" %}<p class="muted">New here? <a href="{{ url_for('signup') }}">Create an account</a></p>
+  {% else %}<p class="muted">Already registered? <a href="{{ url_for('login') }}">Login</a></p>{% endif %}
+</section>
+{% endblock %}

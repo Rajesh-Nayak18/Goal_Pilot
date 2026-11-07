@@ -53,6 +53,12 @@ http://127.0.0.1:5000
 
 Create an account and start using Goal Pilot. The `goal_pilot.db` database file is created automatically.
 
+## Deploying to Vercel
+
+Vercel imports the Flask application instead of running `app.py` directly. The database schema is initialized when the app is imported, and SQLite uses `/tmp/goal_pilot.db` on Vercel because the deployed application files are read-only. You can set `DATABASE_PATH` to override the database file location.
+
+Set a strong `SECRET_KEY` in the Vercel project's environment variables and redeploy after changing environment variables. SQLite files in `/tmp` are temporary and are not shared across serverless instances, so accounts and tasks are not durable. For a production deployment, replace SQLite with a managed database such as PostgreSQL.
+
 ## Project structure
 
 ```text

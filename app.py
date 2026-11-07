@@ -6,7 +6,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "change-this-secret-before-deployment")
-DATABASE = "goal_pilot.db"
+if os.environ.get("DATABASE_PATH"):
+    DATABASE = os.environ["DATABASE_PATH"]
+elif os.environ.get("VERCEL"):
+    DATABASE = os.path.join("/tmp", "goal_pilot.db")
+else:
+    DATABASE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "goal_pilot.db")
 
 ROADMAPS = {
     "Web Developer": [
@@ -67,6 +72,8 @@ def init_db():
     """)
     db.commit()
     db.close()
+
+init_db()
 
 def login_required(view):
     @wraps(view)
@@ -208,5 +215,4 @@ def delete_task(task_id):
     return redirect(url_for("dashboard"))
 
 if __name__ == "__main__":
-    init_db()
     app.run(debug=True)
